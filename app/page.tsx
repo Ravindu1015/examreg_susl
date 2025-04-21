@@ -1,103 +1,161 @@
-import Image from "next/image";
+import Link from 'next/link';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="bg-white">
+      {/* Hero section */}
+      <div className="relative bg-gradient-to-r from-red-900 to-silver-700">
+        <div className="container mx-auto px-4 py-24 sm:py-32">
+          <div className="max-w-2xl">
+            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
+              University Exam Registration Portal
+            </h1>
+            <p className="mt-6 max-w-xl text-xl text-blue-100">
+              A streamlined platform for students to register for their exams and for administrators to track and manage registrations efficiently.
+            </p>
+            <div className="mt-10 flex gap-4">
+              <Link href="/login" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
+                Student Login
+              </Link>
+              <Link href="/register" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-800 bg-opacity-60 hover:bg-opacity-70 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Register
+              </Link>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+
+      {/* Features section */}
+      <div className="py-16 sm:py-24">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+              Simplify Your Exam Registration Process
+            </h2>
+            <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+              Our platform provides an easy and efficient way to manage your exam registrations.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-8 md:grid-cols-3">
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="w-12 h-12 bg-blue-100 rounded-md flex items-center justify-center text-blue-600">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Easy Registration</h3>
+              <p className="mt-2 text-base text-gray-500">
+                Register for your exams in just a few clicks. Add subjects by their codes or names.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="w-12 h-12 bg-blue-100 rounded-md flex items-center justify-center text-blue-600">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Track Your History</h3>
+              <p className="mt-2 text-base text-gray-500">
+                View your complete registration history and current status for each subject.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="w-12 h-12 bg-blue-100 rounded-md flex items-center justify-center text-blue-600">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Instant Updates</h3>
+              <p className="mt-2 text-base text-gray-500">
+                Get real-time notifications about deadlines, registration status, and exam schedules.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="bg-gray-50 py-12 sm:py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-blue-700 rounded-lg shadow-xl overflow-hidden">
+            <div className="px-6 py-12 sm:px-12 lg:flex lg:items-center lg:py-16">
+              <div className="lg:w-0 lg:flex-1">
+                <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                  Ready to register for your exams?
+                </h2>
+                <p className="mt-3 max-w-lg text-lg text-blue-100">
+                  Sign in with your student index number to get started or create a new account if you haven't registered yet.
+                </p>
+              </div>
+              <div className="mt-8 flex lg:mt-0 lg:ml-8">
+                <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+                <Link href="/login" className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50">
+                    Sign In
+                  </Link>
+                  <Link href="/register" className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-800 bg-opacity-70 hover:bg-opacity-80">
+                    Register Now
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h2 className="text-3xl font-extrabold text-gray-900">Frequently Asked Questions</h2>
+            <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+              Common questions about the exam registration process.
+            </p>
+          </div>
+
+          <div className="mt-12 max-w-3xl mx-auto">
+            <div className="space-y-6">
+              <div className="bg-white shadow overflow-hidden rounded-md">
+                <div className="px-6 py-4">
+                  <h3 className="text-lg font-medium text-gray-900">When can I register for exams?</h3>
+                  <p className="mt-2 text-base text-gray-500">
+                    Registration typically opens 4 weeks before the examination period and closes 2 weeks before the first exam. Check the academic calendar for specific dates.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white shadow overflow-hidden rounded-md">
+                <div className="px-6 py-4">
+                  <h3 className="text-lg font-medium text-gray-900">Can I change my registered subjects?</h3>
+                  <p className="mt-2 text-base text-gray-500">
+                    Yes, you can add or remove subjects until the registration deadline. After the deadline, you'll need to contact the examination office for any changes.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white shadow overflow-hidden rounded-md">
+                <div className="px-6 py-4">
+                  <h3 className="text-lg font-medium text-gray-900">How do I know my registration is complete?</h3>
+                  <p className="mt-2 text-base text-gray-500">
+                    After registration, you'll receive a confirmation email. You can also check your registration status in the "History" section of your dashboard.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white shadow overflow-hidden rounded-md">
+                <div className="px-6 py-4">
+                  <h3 className="text-lg font-medium text-gray-900">I forgot my password, what should I do?</h3>
+                  <p className="mt-2 text-base text-gray-500">
+                    Click on the "Forgot Password" link on the login page. You'll receive instructions to reset your password via email.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
