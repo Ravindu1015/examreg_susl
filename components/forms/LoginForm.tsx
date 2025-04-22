@@ -1,6 +1,8 @@
-'use client';
+
 
 import mongoose, { Schema, model } from 'mongoose';
+import Registration from '@/models/Registration';
+
 
 export interface IRegistration {
   student: mongoose.Types.ObjectId;

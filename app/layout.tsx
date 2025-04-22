@@ -1,14 +1,10 @@
-'use client';
-
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { SessionProvider } from 'next-auth/react'; // Import SessionProvider
-// app/layout.tsx
-import './globals.css'
-
+import { Providers } from './providers'; // ✅ Import your client-side wrapper
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,18 +16,18 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="min-h-screen flex flex-col">
-          <Header />
-          <SessionProvider> {/* ⬅️ Wrap here */}
-          {children}
-        </SessionProvider>
-          <Footer />
-        </div>
+        <Providers> {/* ✅ Wrap the entire app here */}
+          <div className="min-h-screen flex flex-col">
+            <Header />
+            {children}
+            <Footer />
+          </div>
+        </Providers>
       </body>
     </html>
   );

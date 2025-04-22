@@ -1,4 +1,13 @@
-import mongoose, { Schema, model } from 'mongoose';
+import mongoose, { Schema, model, models} from 'mongoose';
+import Registration from '@/models/Registration';
+import { ISubject } from '@/models/Subject';  
+import { IUser } from '@/models/User';
+import { IFaculty } from '@/models/Faculty';
+import { IDepartment } from '@/models/Department';
+
+// import { IAcademicYear } from '@/models/AcademicYear'; // Ensure this file exists or correct the path
+
+
 
 export interface IRegistration {
   student: mongoose.Types.ObjectId;
@@ -9,6 +18,11 @@ export interface IRegistration {
   status: 'pending' | 'approved' | 'rejected';
   paymentStatus?: 'pending' | 'paid';
 }
+
+
+
+
+
 
 const registrationSchema = new Schema<IRegistration>(
   {
