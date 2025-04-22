@@ -7,10 +7,10 @@ import { useRouter } from 'next/navigation';
 export default function AdminReports() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [faculties, setFaculties] = useState([]);
-  const [departments, setDepartments] = useState([]);
-  const [degrees, setDegrees] = useState([]);
-  const [batches, setBatches] = useState([]);
+  const [faculties, setFaculties] = useState<string[]>([]);
+  const [departments, setDepartments] = useState<string[]>([]);
+  const [degrees, setDegrees] = useState<string[]>([]);
+  const [batches, setBatches] = useState<string[]>([]);
   const [filters, setFilters] = useState({
     faculty: '',
     department: '',
@@ -48,7 +48,7 @@ export default function AdminReports() {
     }
   };
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
     setFilters({
       ...filters,
@@ -56,7 +56,7 @@ export default function AdminReports() {
     });
   };
 
-  const handleDownload = async (format) => {
+  const handleDownload = async (format: string) => {
     setDownloading(true);
     try {
       // In a real app, you'd make an API call to download the data
@@ -277,4 +277,4 @@ export default function AdminReports() {
         </div>
       </div>
     </div>
-  );
+  )};

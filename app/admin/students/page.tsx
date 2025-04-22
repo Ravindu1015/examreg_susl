@@ -1,13 +1,24 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, SetStateAction } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export default function AdminStudents() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [students, setStudents] = useState([]);
+  interface Student {
+    id: number;
+    indexNumber: string;
+    name: string;
+    email: string;
+    faculty: string;
+    department: string;
+    batch: string;
+    semester: number;
+  }
+
+  const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,7 +68,7 @@ export default function AdminStudents() {
   const currentStudents = filteredStudents.slice(indexOfFirstStudent, indexOfLastStudent);
   const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: { target: { value: SetStateAction<string>; }; }) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1); // Reset to first page on new search
   };

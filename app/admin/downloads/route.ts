@@ -5,7 +5,7 @@ import Registration from '@/models/Registration';
 import User from '@/models/User';
 import Subject from '@/models/Subject';
 
-export async function POST(req) {
+export async function POST(req: { json: () => any; }) {
   try {
     const session = await getServerSession();
 
@@ -19,7 +19,7 @@ export async function POST(req) {
     const { faculty, department, degree, batch, semester, format } = body;
     
     // Build query for user filtering
-    const userQuery = {};
+    const userQuery: { faculty?: string; department?: string; degree?: string; batch?: string } = {};
     if (faculty) userQuery.faculty = faculty;
     if (department) userQuery.department = department;
     if (degree) userQuery.degree = degree;
@@ -30,7 +30,7 @@ export async function POST(req) {
     const userIds = users.map(user => user._id);
     
     // Build registration query
-    const registrationQuery = {
+    const registrationQuery: Record<string, any> = {
       student: { $in: userIds }
     };
     

@@ -7,8 +7,16 @@ import { useRouter } from 'next/navigation';
 export default function RegisterForExams() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [subjects, setSubjects] = useState([]);
-  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  interface Subject {
+    _id: string;
+    name: string;
+    code: string;
+    credits: number;
+    semester: number;
+  }
+
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -46,7 +54,7 @@ export default function RegisterForExams() {
     }
   };
 
-  const toggleSubjectSelection = (subjectId) => {
+  const toggleSubjectSelection = (subjectId: any) => {
     if (selectedSubjects.includes(subjectId)) {
       setSelectedSubjects(selectedSubjects.filter(id => id !== subjectId));
     } else {
@@ -54,7 +62,7 @@ export default function RegisterForExams() {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     
     if (selectedSubjects.length === 0) {

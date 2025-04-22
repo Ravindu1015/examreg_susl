@@ -7,7 +7,19 @@ import { useRouter } from 'next/navigation';
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [stats, setStats] = useState({
+  interface Registration {
+    id: number;
+    student: string;
+    subject: string;
+    date: string;
+  }
+
+  const [stats, setStats] = useState<{
+    totalStudents: number;
+    pendingRegistrations: number;
+    totalSubjects: number;
+    recentRegistrations: Registration[];
+  }>({
     totalStudents: 0,
     pendingRegistrations: 0,
     totalSubjects: 0,
