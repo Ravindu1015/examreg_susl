@@ -1,3 +1,5 @@
+'use client';
+
 import mongoose, { Schema, model } from 'mongoose';
 
 export interface IRegistration {

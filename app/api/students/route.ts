@@ -1,3 +1,5 @@
+'use client';
+
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import dbConnect from '@/lib/db';
