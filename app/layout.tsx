@@ -3,6 +3,10 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { SessionProvider } from 'next-auth/react'; // Import SessionProvider
+// app/layout.tsx
+import './globals.css'
+
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,9 +25,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="min-h-screen flex flex-col">
           <Header />
-          <main className="flex-grow">
-            {children}
-          </main>
+          <SessionProvider> {/* ⬅️ Wrap here */}
+          {children}
+        </SessionProvider>
           <Footer />
         </div>
       </body>

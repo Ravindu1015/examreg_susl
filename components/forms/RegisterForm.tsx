@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -19,7 +20,7 @@ export default function RegisterForm() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -67,7 +68,7 @@ export default function RegisterForm() {
     setStep(1);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     
     if (step === 1) {
@@ -98,7 +99,7 @@ export default function RegisterForm() {
       // Redirect to login page on successful registration
       router.push('/login?registered=true');
     } catch (err) {
-      setError(err.message || 'An error occurred during registration');
+      setError((err instanceof Error ? err.message : 'An error occurred during registration'));
     } finally {
       setLoading(false);
     }

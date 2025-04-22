@@ -3,6 +3,15 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import dbConnect from '@/lib/db';
 import User from '@/models/User';
 
+// Ensure authOptions is exported from this file
+export const authOptions = {
+  // Add your authentication options here
+  secret: process.env.AUTH_SECRET,
+  providers: [
+    // Add your authentication providers here
+  ],
+};
+
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
@@ -11,7 +20,7 @@ const handler = NextAuth({
         indexNumber: { label: "Index Number", type: "text" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials: { indexNumber: any; password: any; }) {
+      async authorize(credentials: Record<"indexNumber" | "password", string> | undefined) {
         if (!credentials?.indexNumber || !credentials?.password) {
           return null;
         }

@@ -13,15 +13,14 @@ interface MongooseCache {
 
 declare global {
   namespace NodeJS {
-    var mongoose: MongooseCache;
+    interface Global {
+      mongoose?: MongooseCache;
+    }
   }
 }
 
-let cached: MongooseCache = global.mongoose || { conn: null, promise: null };
-
-let cached: MongooseCache = globalThis.mongoose || { conn: null, promise: null };
-  cached = global.mongoose = { conn: null, promise: null };
-}
+let cached: MongooseCache = (global as any).mongoose || { conn: null, promise: null };
+(global as any).mongoose = cached;
 
 async function dbConnect() {
   if (cached.conn) {
