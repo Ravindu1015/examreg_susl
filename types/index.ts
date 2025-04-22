@@ -1,6 +1,7 @@
-import { User } from '@/models/User';
-import { Subject } from '@/models/Subject';
-import { Registration } from '@/models/Registration';
+import { IUser } from '@/models/User';
+import { ISubject } from '@/models/Subject';
+import { IRegistration } from '@/models/Registration';
+import { User } from 'next-auth';
 
 export interface SessionUser {
   id: string;
@@ -15,8 +16,8 @@ export interface SessionUser {
 }
 
 export type UserType = User;
-export type SubjectType = Subject;
-export type RegistrationType = Registration;
+export type SubjectType = ISubject;
+export type RegistrationType = IRegistration;
 
 export interface ApiResponse<T> {
   data?: T;

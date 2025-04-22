@@ -7,7 +7,18 @@ import { useRouter } from 'next/navigation';
 export default function RegistrationHistory() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [registrations, setRegistrations] = useState([]);
+  interface Registration {
+    id: number;
+    subject: string;
+    code: string;
+    semester: number;
+    registrationDate: string;
+    status: string;
+    examDate: string;
+    reason?: string;
+  }
+
+  const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
 
@@ -78,7 +89,7 @@ export default function RegistrationHistory() {
     return reg.status === filter;
   });
 
-  const getStatusBadgeClass = (status) => {
+  const getStatusBadgeClass = (status: string) => {
     switch (status) {
       case 'approved':
         return 'bg-green-100 text-green-800';
