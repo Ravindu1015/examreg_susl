@@ -6,9 +6,9 @@ import Registration from '@/models/Registration';
 import Subject from '@/models/Subject';
 import User from '@/models/User';
 
-export async function GET(req) {
+export async function GET(req: { url: string | URL; }) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession() as { user: { name?: string | null; email?: string | null; image?: string | null; role?: string | null; indexNumber?: string | null } };
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -19,7 +19,7 @@ export async function GET(req) {
     const url = new URL(req.url);
     const studentId = url.searchParams.get('studentId');
     
-    let query = {};
+    let query: { student?: string } = {};
     
     if (session.user.role === 'student') {
       // Students can only view their own registrations
@@ -45,7 +45,7 @@ export async function GET(req) {
   }
 }
 
-export async function POST(req) {
+export async function POST(req: { json: () => any; }) {
   try {
     const session = await getServerSession();
 
@@ -115,7 +115,7 @@ export async function POST(req) {
     console.error('Error creating registrations:', error);
     return NextResponse.json({ 
       error: 'Failed to register for subjects',
-      message: error.message
+      message: error instanceof Error ? error.message : 'An unknown error occurred'
     }, { status: 500 });
   }
 }

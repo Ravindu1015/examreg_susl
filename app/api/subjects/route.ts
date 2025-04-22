@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import dbConnect from '@/lib/db';
 import Subject from '@/models/Subject';
 
-export async function GET(req) {
+export async function GET(req: { url: string | URL; }) {
   try {
     const session = await getServerSession();
 
@@ -21,7 +21,7 @@ export async function GET(req) {
     const semester = url.searchParams.get('semester');
 
     // Build query
-    const query = {};
+    const query: { faculty?: string; department?: string; degree?: string; semester?: number } = {};
     if (faculty) query.faculty = faculty;
     if (department) query.department = department;
     if (degree) query.degree = degree;
@@ -36,7 +36,7 @@ export async function GET(req) {
   }
 }
 
-export async function POST(req) {
+export async function POST(req: { json: () => any; }) {
   try {
     const session = await getServerSession();
 
