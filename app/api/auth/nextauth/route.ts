@@ -1,46 +1,36 @@
-
-
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import dbConnect from '@/lib/db';
 import User from '@/models/User';
+import bcrypt from 'bcryptjs';
 
-// Ensure authOptions is exported from this file
 export const authOptions = {
-  // Add your authentication options here
-  secret: process.env.AUTH_SECRET,
-  providers: [
-    // Add your authentication providers here
-  ],
-};
+  secret: process.env.NEXTAUTH_SECRET, // Make sure this is defined in your .env
 
-const handler = NextAuth({
   providers: [
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        indexNumber: { label: "Index Number", type: "text" },
-        password: { label: "Password", type: "password" }
+        indexNumber: { label: 'Index Number', type: 'text' },
+        password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials: Record<"indexNumber" | "password", string> | undefined) {
+      async authorize(credentials) {
         if (!credentials?.indexNumber || !credentials?.password) {
-          return null;
+          throw new Error('Missing credentials');
         }
 
         await dbConnect();
-        
+
         const user = await User.findOne({ indexNumber: credentials.indexNumber });
-        
         if (!user) {
-          return null;
+          throw new Error('No user found with this index number');
         }
-        
-        const isValid = await user.comparePassword(credentials.password);
-        
+
+        const isValid = await bcrypt.compare(credentials.password, user.password);
         if (!isValid) {
-          return null;
+          throw new Error('Invalid password');
         }
-        
+
         return {
           id: user._id.toString(),
           indexNumber: user.indexNumber,
@@ -50,44 +40,48 @@ const handler = NextAuth({
           faculty: user.faculty,
           department: user.department,
           degree: user.degree,
-          batch: user.batch
+          batch: user.batch,
         };
-      }
-    })
+      },
+    }),
   ],
+
   session: {
-    strategy: "jwt",
+    strategy: 'jwt' as 'jwt',
   },
+
   callbacks: {
-    async session({ session, token }: { session: any; token: any }) {
-      if (token) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as string;
-        session.user.indexNumber = token.indexNumber as string;
-        session.user.faculty = token.faculty as string;
-        session.user.department = token.department as string;
-        session.user.degree = token.degree as string;
-        session.user.batch = token.batch as string;
-      }
-      return session;
-    },
     async jwt({ token, user }: { token: any; user?: any }) {
       if (user) {
         token.id = user.id;
-        token.role = user.role;
         token.indexNumber = user.indexNumber;
+        token.role = user.role;
         token.faculty = user.faculty;
         token.department = user.department;
         token.degree = user.degree;
         token.batch = user.batch;
       }
       return token;
-    }
+    },
+    async session({ session, token }: { session: any; token: any }) {
+      if (token) {
+        session.user.id = token.id;
+        session.user.indexNumber = token.indexNumber;
+        session.user.role = token.role;
+        session.user.faculty = token.faculty;
+        session.user.department = token.department;
+        session.user.degree = token.degree;
+        session.user.batch = token.batch;
+      }
+      return session;
+    },
   },
+
   pages: {
     signIn: '/login',
-    error: '/login',
-  }
-});
+    error: '/login', // Same as signIn if you want to show errors there
+  },
+};
 
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

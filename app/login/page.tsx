@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import LoginForm from '@/components/forms/LoginForm';
 import { useSession } from 'next-auth/react';
@@ -10,17 +10,21 @@ export default function LoginPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      // Redirect based on user role
-      const redirectPath = session.user.role === 'admin' 
-        ? '/admin/dashboard' 
-        : '/student/dashboard';
+    if (status === 'authenticated' && session?.user?.role) {
+      const redirectPath =
+        session.user.role === 'admin'
+          ? '/admin/dashboard'
+          : '/student/dashboard';
       router.push(redirectPath);
     }
   }, [status, session, router]);
 
-  if (status === 'loading' || status === 'authenticated') {
-    return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+  if (status === 'loading' || (status === 'authenticated' && !session?.user?.role)) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        Loading...
+      </div>
+    );
   }
 
   return (

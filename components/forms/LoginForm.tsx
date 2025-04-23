@@ -1,42 +1,35 @@
 'use client';
 
 import { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    setSuccess('');
 
-    try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+    const res = await signIn('credentials', {
+      redirect: false,
+      email,
+      password,
+    });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Something went wrong');
-      }
-
-      setSuccess('Login successful!');
-      // Optional: redirect, store token, etc.
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    if (res?.error) {
+      setError(res.error);
+    } else {
+      // Trigger redirect manually, or let useSession() in LoginPage handle it
+      router.refresh(); // Optional: revalidate session
     }
+
+    setLoading(false);
   };
 
   return (
@@ -66,7 +59,6 @@ export default function LoginForm() {
       </div>
 
       {error && <p className="text-red-500">{error}</p>}
-      {success && <p className="text-green-500">{success}</p>}
 
       <button
         type="submit"

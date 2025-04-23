@@ -1,122 +1,37 @@
-
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import mongoose from 'mongoose';
-import dbConnect from '@/lib/db';
-import Registration from '@/models/Registration';
-import Subject from '@/models/Subject';
+import bcrypt from 'bcryptjs';
+import connectDB from '@/lib/db';
 import User from '@/models/User';
 
-export async function GET(req: { url: string | URL; }) {
+export async function POST(req: Request) {
   try {
-    const session = await getServerSession() as { user: { name?: string | null; email?: string | null; image?: string | null; role?: string | null; indexNumber?: string | null } };
+    await connectDB();
+    const { name, email, password, role } = await req.json();
 
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!name || !email || !password || !role) {
+      return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
-    await dbConnect();
-
-    const url = new URL(req.url);
-    const studentId = url.searchParams.get('studentId');
-    
-    let query: { student?: string } = {};
-    
-    if (session.user.role === 'student') {
-      // Students can only view their own registrations
-      const user = await User.findOne({ indexNumber: session.user.indexNumber });
-      if (!user) {
-        return NextResponse.json({ error: 'User not found' }, { status: 404 });
-      }
-      query.student = user._id;
-    } else if (session.user.role === 'admin' && studentId) {
-      // Admins can view registrations for a specific student
-      query.student = studentId;
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return NextResponse.json({ error: 'User already exists' }, { status: 409 });
     }
 
-    const registrations = await Registration.find(query)
-      .populate('student', 'indexNumber name')
-      .populate('subject', 'code name faculty department')
-      .sort({ registrationDate: -1 });
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    return NextResponse.json(registrations);
-  } catch (error) {
-    console.error('Error fetching registrations:', error);
-    return NextResponse.json({ error: 'Failed to fetch registrations' }, { status: 500 });
-  }
-}
-
-export async function POST(req: { json: () => any; }) {
-  try {
-    const session = await getServerSession();
-
-    if (!session || session.user.role !== 'student') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    await dbConnect();
-    
-    const body = await req.json();
-    const { subjects } = body;
-    
-    if (!subjects || !Array.isArray(subjects) || subjects.length === 0) {
-      return NextResponse.json({ error: 'No subjects provided' }, { status: 400 });
-    }
-    
-    const user = await User.findOne({ indexNumber: session.user.indexNumber });
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-    
-    // Get current academic year (e.g., "2024/2025")
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const academicYear = month < 8 
-      ? `${year-1}/${year}` 
-      : `${year}/${year+1}`;
-    
-    // Create registrations for each subject
-    const registrationPromises = subjects.map(async (subjectId) => {
-      // Check if subject exists
-      const subject = await Subject.findById(subjectId);
-      if (!subject) {
-        throw new Error(`Subject with ID ${subjectId} not found`);
-      }
-      
-      // Check if student already registered for this subject
-      const existingRegistration = await Registration.findOne({
-        student: user._id,
-        subject: subject._id,
-        academicYear
-      });
-      
-      if (existingRegistration) {
-        throw new Error(`Already registered for ${subject.name}`);
-      }
-      
-      // Create new registration
-      return new Registration({
-        student: user._id,
-        subject: subject._id,
-        academicYear,
-        semester: user.semester,
-        registrationDate: new Date(),
-        status: 'pending'
-      }).save();
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role, // 'admin' or 'student'
     });
-    
-    const results = await Promise.all(registrationPromises);
-    
-    return NextResponse.json({ 
-      message: 'Registration successful', 
-      count: results.length 
-    }, { status: 201 });
-  } catch (error) {
-    console.error('Error creating registrations:', error);
-    return NextResponse.json({ 
-      error: 'Failed to register for subjects',
-      message: error instanceof Error ? error.message : 'An unknown error occurred'
-    }, { status: 500 });
+
+    return NextResponse.json(
+      { message: 'User registered successfully', user: { id: newUser._id, email: newUser.email, role: newUser.role } },
+      { status: 201 }
+    );
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
